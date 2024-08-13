@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Page</title>
+    <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            background-color: #1A1A1A;
+            padding: 10px;
+        }
+        .navbar-title {
+            color: #00FF00;
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: auto;
+        }
+        .navbar a {
+            color: #FFFFFF;
+            background-color: #00FF00;
+            padding: 10px 20px;
+            margin: 0 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+        .navbar a.youtube-btn {
+            background-color: #FF0000;
+        }
+        .navbar a.youtube-btn:hover {
+            transform: scale(1.1);
+            background-color: #AA0000;
+        }
+        .navbar a.telegram-btn {
+            background-color: #0088CC;
+        }
+        .navbar a.telegram-btn:hover {
+            transform: scale(1.1);
+            background-color: #005599;
+        }
+        #search {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            box-sizing: border-box;
+            margin: 20px 0;
+        }
+        .download-item {
+            background-color: #1A1A1A;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .download-item img {
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+        }
+        .download-item .content {
+            flex: 1;
+        }
+        .download-item h2 {
+            color: #00FF00;
+            font-weight: bold;
+            margin: 0;
+        }
+        .download-item .description {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+        .download-item .description p {
+            color: #FFFFFF;
+            font-weight: bold;
+            background-color: #333333;
+            padding: 5px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        .download-item button {
+            background-color: #0000FF;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .download-item button:hover {
+            transform: scale(1.1);
+        }
+        .version-options {
+            display: none;
+            margin-top: 10px;
+        }
+        .version-options button {
+            margin-top: 5px;
+            background-color: #008CBA; /* Blue */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .version-options button:hover {
+            background-color: white; 
+            color: black; 
+            border: 2px solid #008CBA;
+        }
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+            }
+            .navbar-title {
+                margin-bottom: 10px;
+            }
+            .navbar a {
+                margin-bottom: 10px;
+            }
+            .download-item {
+                flex-direction: column;
+                align-items: center;
+            }
+            .download-item img {
+                width: 80px;
+                height: 80px;
+            }
+            .download-item button, .version-options button {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-title">MAX TECNO WEBSITE</div>
+        <a class="youtube-btn" href="https://youtube.com/@maxtecnoo?si=WhIdupkhm85Xn4no" target="_blank">YouTube</a>
+        <a class="telegram-btn" href="https://chat.whatsapp.com/I3g1qDBAGKQ4t7YWcDQUG9" target="_blank">Whatsapp Grup</a>
+    </div>
+    <input type="text" id="search" placeholder="Search...">
+    <div class="download-item" data-name="GPT-4o MOD">
+        <img src="https://gcdnb.pbrd.co/images/1Noydq7w6PYu.jpg?o=1" alt="Software 1 Image">
+        <div class="content">
+            <h2>GPT-4o MOD</h2>
+            <div class="description">
+                <p>GPT REALTIME ✅</p>
+                <p>GENERATE FOTO ✅</p>
+                <p>PREMIUM FEATURE ✅</p>
+                <p>NO LOGIN ✅</p>
+            </div>
+            <button class="download-btn">Download</button>
+            <div class="version-options">
+                <button data-link="https://maxtecnoo.github.io/wb1/">[V1] 🔓 open download</button>
+                <button data-link="http://example.com/goxome">[V2] 🔒 not yet released</button>
+            </div>
+        </div>
+    </div>
+    <div class="download-item" data-name="SET EDIT MOD">
+        <img src="https://gcdnb.pbrd.co/images/qYyLI1C9UFc7.png?o=1" alt="Software 2 Image">
+        <div class="content">
+            <h2>SET EDIT MOD</h2>
+            <div class="description">
+                <p>ANDROID 14 SUPPORT ✅</p>
+                <p>UNEXPECTED FAILURE FIX ✅</p>
+                <p>TAMPILAN BARU ✅</p>
+                <p>FULL TABLE ✅</p>
+            </div>
+            <button class="download-btn">Download</button>
+            <div class="version-options">
+                <button data-link="https://maxtecnoo.github.io/wb3/">[V1] 🔓 open download</button>
+                <button data-link="http://example.com/">[V2] 🔒 not yet released</button>
+            </div>
+        </div>
+    </div>
+    <div class="download-item" data-name="SHADOW FIGHT 2 MOD MENU">
+        <img src="https://gcdnb.pbrd.co/images/3hAHT6UuxieJ.jpg?o=1" alt="Software 3 Image">
+        <div class="content">
+            <h2>SHADOW FIGHT 2 MOD MENU</h2>
+            <div class="description">
+                <p>UNLIMITED COINS ✅</p>
+                <p>UNLIMITED LEVEL ✅</p>
+                <p>UNLIMITED ALL ✅</p>
+                <p>SPECIAL EDITION ✅</p>
+            </div>
+            <button class="download-btn">Download</button>
+            <div class="version-options">
+                <button data-link="https://maxtecnoo.github.io/wb4/">[V1] 🔓 open download</button>
+                <button data-link="http://example.com/">[V2] 🔒 not yet released</button>
+            </div>
+        </div>
+    </div>
+    <div class="download-item" data-name="MODULE BREVENT FF">
+        <img src="https://gcdnb.pbrd.co/images/9mLzxwuZI9VC.jpg?o=1" alt="Software 4 Image">
+        <div class="content">
+            <h2>MODULE BREVENT FF</h2>
+            <div class="description">
+                <p>FPS FREE FIRE BOOST ✅</p>
+                <p>MAIN FF LANCAR JAYA ✅</p>
+                <p>ANTI PATAH PATAH SAAT BERMAIN ✅</p>
+            </div>
+            <button class="download-btn">Download</button>
+            <div class="version-options">
+                <button data-link="https://maxtecnoo.github.io/wb2/">[V1] 🔓 open download</button>
+                <button data-link="http://example.com/">[V2] 🔒 not yet released</button>
+            </div>
+        </div>
+    </div>
+    <div class="download-item" data-name="SPOTIFY MOD">
+        <img src="https://gcdnb.pbrd" alt="Spotify MOD Image">
+        <div class="content">
+            <h2>SPOTIFY MOD</h2>
+            <div class="description">
+                <p>AKAN SEGERA RILIS</p>
+            </div>
+            <button class="download-btn">Download</button>
+            <div class="version-options">
+                <button data-link="https://example.com">[V1] SOON</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('search').addEventListener('input', function(e) {
+            var searchVal = e.target.value.toLowerCase();
+            var items = document.querySelectorAll('.download-item');
+            items.forEach(function(item) {
+                var name = item.querySelector('h2').textContent.toLowerCase();
+                if (name.indexOf(searchVal) !== -1) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        var downloadBtns = document.querySelectorAll('.download-btn');
+        downloadBtns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                var versionOptions = e.target.nextElementSibling;
+                versionOptions.style.display = versionOptions.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        var versionBtns = document.querySelectorAll('.version-options button');
+        versionBtns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                var link = e.target.getAttribute('data-link');
+                window.location.href = link;
+            });
+        });
+    </script>
+</body>
+</html>
