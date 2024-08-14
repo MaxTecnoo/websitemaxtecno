@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Page</title>
+    <title>Website MaxTecno</title>
     <style>
         body {
             background-color: #000000;
@@ -13,8 +13,10 @@
         .navbar {
             display: flex;
             justify-content: center;
+            align-items: center;
             background-color: #1A1A1A;
             padding: 10px;
+            flex-wrap: wrap;
         }
         .navbar-title {
             color: #00FF00;
@@ -22,7 +24,7 @@
             font-weight: bold;
             margin-right: auto;
         }
-        .navbar a {
+        .navbar a, .navbar button {
             color: #FFFFFF;
             background-color: #00FF00;
             padding: 10px 20px;
@@ -52,6 +54,27 @@
             font-size: 18px;
             box-sizing: border-box;
             margin: 20px 0;
+            animation: rainbow 5s infinite;
+            border: 2px solid transparent;
+            border-radius: 5px;
+        }
+        .info-text {
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid #FFFFFF;
+            padding: 10px;
+            margin: 20px 0;
+            animation: rainbow 5s infinite;
+        }
+        @keyframes rainbow {
+            0% { border-color: #FF0000; color: #FF0000; }
+            14% { border-color: #FF7F00; color: #FF7F00; }
+            28% { border-color: #FFFF00; color: #FFFF00; }
+            42% { border-color: #00FF00; color: #00FF00; }
+            57% { border-color: #0000FF; color: #0000FF; }
+            71% { border-color: #4B0082; color: #4B0082; }
+            85% { border-color: #8B00FF; color: #8B00FF; }
+            100% { border-color: #FF0000; color: #FF0000; }
         }
         .download-item {
             background-color: #1A1A1A;
@@ -111,7 +134,7 @@
         }
         .version-options button {
             margin-top: 5px;
-            background-color: #008CBA; /* Blue */
+            background-color: #008CBA;
             border: none;
             color: white;
             padding: 15px 32px;
@@ -129,6 +152,58 @@
             color: black; 
             border: 2px solid #008CBA;
         }
+        .login-premium {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .login-button {
+            background-color: #FFD700;
+            color: #000;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .login-button:hover {
+            background-color: #FFC107;
+        }
+        .floating-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1A1A1A;
+            border: 2px solid #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            text-align: center;
+        }
+        .floating-popup input {
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #FFFFFF;
+            border-radius: 5px;
+            width: 80%;
+        }
+        .close-popup {
+            background-color: #FF0000;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .close-popup:hover {
+            background-color: #CC0000;
+        }
+        .expiry-message {
+            margin-top: 10px;
+            color: #00FF00;
+        }
         @media (max-width: 600px) {
             .navbar {
                 flex-direction: column;
@@ -137,7 +212,7 @@
             .navbar-title {
                 margin-bottom: 10px;
             }
-            .navbar a {
+            .navbar a, .navbar button {
                 margin-bottom: 10px;
             }
             .download-item {
@@ -153,6 +228,41 @@
                 padding: 8px;
             }
         }
+            .buy-premium-button {
+    display: block;
+    margin: 20px auto;
+    background-color: #FF69B4;
+    color: #FFF;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.buy-premium-button:hover {
+    background-color: #FF1493;
+    transform: scale(1.05);
+}
+
+#premiumListPopup {
+    display: none;
+}
+
+.buy-button {
+    background-color: #32CD32;
+    color: #FFF;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.buy-button:hover {
+    background-color: #228B22;
+}
     </style>
 </head>
 <body>
@@ -160,61 +270,95 @@
         <div class="navbar-title">MAX TECNO WEBSITE</div>
         <a class="youtube-btn" href="https://youtube.com/@maxtecnoo?si=WhIdupkhm85Xn4no" target="_blank">YouTube</a>
         <a class="telegram-btn" href="https://chat.whatsapp.com/I3g1qDBAGKQ4t7YWcDQUG9" target="_blank">Whatsapp Grup</a>
+        <button class="login-button" id="loginPremiumBtn">Login Premium</button>
     </div>
     <input type="text" id="search" placeholder="Search...">
+    <button class="buy-premium-button" id="buyPremiumBtn">Beli Premium</button>
+
+<div class="floating-popup" id="premiumListPopup">
+    <h3>HARGA PREMIUM LIST</h3>
+    <p>10K » 15 HARI VIP👑</p>
+    <p>30K » 45 HARI VIP👑</p>
+    <p>50K » PERMANEN VIP👑</p>
+    <p>Klik beli akan di arahkan ke WhatsApp admin dan chat admin nya untuk membeli<p>
+    <button class="buy-button" onclick="window.location.href='https://api.whatsapp.com/send/?phone=%2B6285738238937&text&type=phone_number&app_absent=0'">Beli</button>
+    <button class="close-popup" id="closePremiumListPopup">Tutup</button>
+</div>
+    <div class="info-text">
+        [FREE MODE]👤 » LINK AKAN BERISI IKLAN MAKA DARI ITU KAMU HARUS MELEWATI IKLAN UNTUK MENDOWNLOAD NYA
+    </div>
+    <div class="info-text">
+        [PREMIUM MODE]👑 » AKSES SEMUA LINK DOWNLOAD TANPA IKLAN SEDIKITPUN DOWNLOAD JADI JAUH LEBIH MUDAH DAN SELALU DAPAT UPDATE 
+    </div>
+    
+    <!-- Floating Popup -->
+    <div class="floating-popup" id="floatingPopup">
+        <h3>Password Premium</h3>
+        <input type="text" id="premiumPassword" placeholder="Masukkan Password">
+        <button id="submitPassword">Login</button>
+        <button class="close-popup" id="closePopup">Tutup</button>
+        <div id="loginMessage" style="margin-top: 10px; color: #FF0000; display: none;"></div>
+        <div class="expiry-message" id="expiryMessage"></div>
+    </div>
+
+    <div class="floating-popup" id="notPremiumPopup">
+        <p>Kamu belum premium bahkan belum login sekalipun. Beli premium untuk akses.</p>
+        <button class="close-popup" id="closeNotPremiumPopup">Tutup</button>
+    </div>
+
     <div class="download-item" data-name="GPT-4o MOD">
-        <img src="https://gcdnb.pbrd.co/images/1Noydq7w6PYu.jpg?o=1" alt="Software 1 Image">
+        <img src="https://gcdnb.pbrd.co/images/1Noydq7w6PYu.jpg?o=1" alt="GPT-4o MOD Image">
         <div class="content">
-            <h2>GPT-4o MOD</h2>
+            <h2>GPT-4o</h2>
             <div class="description">
                 <p>GPT REALTIME ✅</p>
                 <p>GENERATE FOTO ✅</p>
                 <p>PREMIUM FEATURE ✅</p>
                 <p>NO LOGIN ✅</p>
             </div>
-            <button class="download-btn">Download</button>
+            <button class="download-btn" type="button" aria-label="Toggle download options for GPT-4o MOD">Download</button>
             <div class="version-options">
-                <button data-link="https://sfl.gl/23YpKrIA">[V1] 🔓 open download</button>
-                <button data-link="http://example.com/">[V2] 🔒 not yet released</button>
+                <button type="button" data-link="https://sfl.gl/23YpKrIA">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👤[FREE MODE]</button>
+                <button class="premium-download-btn" type="button" data-link="https://www.mediafire.com/file/pkiflqbjaawlpt7/ChatOn_v1.43.441-438_%2528PREMIUM%2529.apk/file">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👑[PREMIUM MODE]</button>
             </div>
         </div>
     </div>
     <div class="download-item" data-name="SET EDIT MOD">
-        <img src="https://gcdnb.pbrd.co/images/qYyLI1C9UFc7.png?o=1" alt="Software 2 Image">
+        <img src="https://gcdnb.pbrd.co/images/qYyLI1C9UFc7.png?o=1" alt="SET EDIT MOD Image">
         <div class="content">
-            <h2>SET EDIT MOD</h2>
+            <h2>SET EDIT</h2>
             <div class="description">
                 <p>ANDROID 14 SUPPORT ✅</p>
                 <p>UNEXPECTED FAILURE FIX ✅</p>
                 <p>TAMPILAN BARU ✅</p>
                 <p>FULL TABLE ✅</p>
             </div>
-            <button class="download-btn">Download</button>
+            <button class="download-btn" type="button" aria-label="Toggle download options for SET EDIT MOD">Download</button>
             <div class="version-options">
-                <button data-link="https://sfl.gl/FqcjJUv">[V1] 🔓 open download</button>
-                <button data-link="http://example.com/">[V2] 🔒 not yet released</button>
+                <button type="button" data-link="https://sfl.gl/FqcjJUv">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👤[FREE MODE]</button>
+                <button class="premium-download-btn" type="button" data-link="https://www.mediafire.com/file/ff639i9e48dwc4r/SetEdit-v3.0-rc01.apk/file">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👑[PREMIUM MODE]</button>
             </div>
         </div>
     </div>
     <div class="download-item" data-name="SHADOW FIGHT 2 MOD MENU">
-        <img src="https://gcdnb.pbrd.co/images/3hAHT6UuxieJ.jpg?o=1" alt="Software 3 Image">
+        <img src="https://gcdnb.pbrd.co/images/3hAHT6UuxieJ.jpg?o=1" alt="SHADOW FIGHT 2 MOD MENU Image">
         <div class="content">
-            <h2>SHADOW FIGHT 2 MOD MENU</h2>
+            <h2>SHADOW FIGHT 2</h2>
             <div class="description">
                 <p>UNLIMITED COINS ✅</p>
                 <p>UNLIMITED LEVEL ✅</p>
                 <p>UNLIMITED ALL ✅</p>
                 <p>SPECIAL EDITION ✅</p>
             </div>
-            <button class="download-btn">Download</button>
+            <button class="download-btn" type="button" aria-label="Toggle download options for SHADOW FIGHT 2 MOD MENU">Download</button>
             <div class="version-options">
-                <button data-link="https://sfl.gl/p3t3Yz">[V1] 🔓 open download</button>
-                <button data-link="http://example.com/">[V2] 🔒 not yet released</button>
+                <button type="button" data-link="https://sfl.gl/p3t3Yz">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👤[FREE MODE]</button>
+                <button class="premium-download-btn" type="button" data-link="https://www.mediafire.com/file/f9wo7cxrgttz6tn/Shadow_Fight_2_Special_Premium_Mod_Menu.apk/file">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👑[PREMIUM MODE]</button>
             </div>
         </div>
     </div>
     <div class="download-item" data-name="MODULE BREVENT FF">
-        <img src="https://gcdnb.pbrd.co/images/9mLzxwuZI9VC.jpg?o=1" alt="Software 4 Image">
+        <img src="https://gcdnb.pbrd.co/images/9mLzxwuZI9VC.jpg?o=1" alt="MODULE BREVENT FF Image">
         <div class="content">
             <h2>MODULE BREVENT FF</h2>
             <div class="description">
@@ -222,37 +366,91 @@
                 <p>MAIN FF LANCAR JAYA ✅</p>
                 <p>ANTI PATAH PATAH SAAT BERMAIN ✅</p>
             </div>
-            <button class="download-btn">Download</button>
+            <button class="download-btn" type="button" aria-label="Toggle download options for MODULE BREVENT FF">Download</button>
             <div class="version-options">
-                <button data-link="https://sfl.gl/vghenFKo">[V1] 🔓 open download</button>
-                <button data-link="http://example.com/">[V2] 🔒 not yet released</button>
+                <button type="button" data-link="https://sfl.gl/vghenFKo">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👤[FREE MODE]</button>
+                <button class="premium-download-btn" type="button" data-link="https://www.mediafire.com/file/14ejgpzqekfj13a/free_fire_boost.zip/file">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👑[PREMIUM MODE]</button>
             </div>
         </div>
     </div>
     <div class="download-item" data-name="SPOTIFY MOD">
-        <img src="https://gcdnb.pbrd" alt="Spotify MOD Image">
+        <img src="https://gcdnb.pbrd.co/images/spotify_mod_image.jpg" alt="SPOTIFY MOD Image">
         <div class="content">
             <h2>SPOTIFY MOD</h2>
             <div class="description">
                 <p>AKAN SEGERA RILIS</p>
             </div>
-            <button class="download-btn">Download</button>
+            <button class="download-btn" type="button" aria-label="Toggle download options for SPOTIFY MOD">Download</button>
             <div class="version-options">
-                <button data-link="https://example.com">[V1] SOON</button>
+                <button type="button" data-link="https://example.com">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👤[FREE MODE]</button>
             </div>
         </div>
     </div>
     <script>
+        const premiumUsers = {
+    "jar": { 
+        password: "jar", 
+        daysRemaining: 30
+    },
+    "ambatron": {
+        password: "ambatron",
+        daysRemaining: 1
+    }
+};
+
+document.getElementById('buyPremiumBtn').addEventListener('click', function() {
+    document.getElementById('premiumListPopup').style.display = 'block';
+});
+
+document.getElementById('closePremiumListPopup').addEventListener('click', function() {
+    document.getElementById('premiumListPopup').style.display = 'none';
+});
+        let isPremium = false;
+
+        document.getElementById('loginPremiumBtn').addEventListener('click', function() {
+            document.getElementById('floatingPopup').style.display = 'block';
+        });
+
+        document.getElementById('submitPassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('premiumPassword').value;
+            const loginMessage = document.getElementById('loginMessage');
+            const expiryMessage = document.getElementById('expiryMessage');
+
+            if (premiumUsers[passwordInput]) {
+                const user = premiumUsers[passwordInput];
+
+                if (user.daysRemaining > 0) {
+                    isPremium = true;
+                    loginMessage.style.color = '#00FF00';
+                    loginMessage.textContent = 'Password Benar! Anda sekarang Premium.';
+                    expiryMessage.textContent = `Masa berlaku premium: ${user.daysRemaining} hari tersisa.`;
+                    document.getElementById('loginPremiumBtn').style.display = 'none';
+                    document.getElementById('floatingPopup').style.display = 'none';
+                } else {
+                    loginMessage.style.color = '#FF0000';
+                    loginMessage.textContent = 'Password Salah! Masa berlaku premium sudah kedaluwarsa.';
+                }
+            } else {
+                loginMessage.style.color = '#FF0000';
+                loginMessage.textContent = 'Password Salah! Silahkan beli premium.';
+            }
+            loginMessage.style.display = 'block';
+        });
+
+        document.getElementById('closePopup').addEventListener('click', function() {
+            document.getElementById('floatingPopup').style.display = 'none';
+        });
+
+        document.getElementById('closeNotPremiumPopup').addEventListener('click', function() {
+            document.getElementById('notPremiumPopup').style.display = 'none';
+        });
+
         document.getElementById('search').addEventListener('input', function(e) {
             var searchVal = e.target.value.toLowerCase();
             var items = document.querySelectorAll('.download-item');
             items.forEach(function(item) {
                 var name = item.querySelector('h2').textContent.toLowerCase();
-                if (name.indexOf(searchVal) !== -1) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
+                item.style.display = name.indexOf(searchVal) !== -1 ? 'flex' : 'none';
             });
         });
 
@@ -268,7 +466,15 @@
         versionBtns.forEach(function(btn) {
             btn.addEventListener('click', function(e) {
                 var link = e.target.getAttribute('data-link');
-                window.location.href = link;
+                if (e.target.classList.contains('premium-download-btn')) {
+                    if (isPremium) {
+                        window.location.href = link;
+                    } else {
+                        document.getElementById('notPremiumPopup').style.display = 'block';
+                    }
+                } else {
+                    window.location.href = link;
+                }
             });
         });
     </script>
