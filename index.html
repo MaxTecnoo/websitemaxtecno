@@ -391,11 +391,13 @@
         const premiumUsers = {
             "jar": { 
                 password: "jar", 
-                daysRemaining: 30
+                daysRemaining: 30,
+                isLoggedIn: false
             },
             "ambatron": {
                 password: "ambatron",
-                daysRemaining: 1
+                daysRemaining: 1,
+                isLoggedIn: false
             }
         };
 
@@ -405,21 +407,23 @@
         function checkPremiumStatus() {
             const savedStatus = localStorage.getItem('premiumStatus');
             if (savedStatus) {
-                const { isPremium, daysRemaining } = JSON.parse(savedStatus);
+                const { username, isPremium, daysRemaining } = JSON.parse(savedStatus);
                 if (daysRemaining > 0) {
-                    return { isPremium: true, daysRemaining };
+                    return { username, isPremium: true, daysRemaining };
                 }
             }
-            return { isPremium: false, daysRemaining: 0 };
+            return { username: null, isPremium: false, daysRemaining: 0 };
         }
 
         // Simpan status premium ke localStorage
-        function savePremiumStatus(password) {
-            const user = premiumUsers[password];
+        function savePremiumStatus(username) {
+            const user = premiumUsers[username];
             localStorage.setItem('premiumStatus', JSON.stringify({
+                username: username,
                 isPremium: true,
                 daysRemaining: user.daysRemaining
             }));
+            user.isLoggedIn = true; // Tandai sebagai pengguna yang sudah login
         }
 
         // Cek status premium saat halaman dimuat
@@ -451,7 +455,10 @@
             if (premiumUsers[passwordInput]) {
                 const user = premiumUsers[passwordInput];
 
-                if (user.daysRemaining > 0) {
+                if (user.isLoggedIn) {
+                    loginMessage.style.color = '#FF0000';
+                    loginMessage.textContent = 'Password telah digunakan pengguna lain.';
+                } else if (user.daysRemaining > 0) {
                     isPremium = true;
                     savePremiumStatus(passwordInput);
                     loginMessage.style.color = '#00FF00';
