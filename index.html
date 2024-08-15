@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MaxTecno Website</title>
+    <title>Download Page</title>
     <style>
         body {
             background-color: #000000;
@@ -392,12 +392,14 @@
             "jar": { 
                 password: "jar", 
                 daysRemaining: 30,
-                isLoggedIn: false
+                isLoggedIn: false,
+                isExpired: false
             },
             "ambatron": {
                 password: "ambatron",
                 daysRemaining: 1,
-                isLoggedIn: false
+                isLoggedIn: false,
+                isExpired: false
             }
         };
 
@@ -423,7 +425,19 @@
                 isPremium: true,
                 daysRemaining: user.daysRemaining
             }));
-            user.isLoggedIn = true; // Tandai pengguna sebagai login
+        }
+
+        // Logout pengguna yang sudah login
+        function logoutPreviousUser() {
+            for (const key in premiumUsers) {
+                if (premiumUsers[key].isLoggedIn) {
+                    premiumUsers[key].isLoggedIn = false; // Logout pengguna yang sedang login
+                    premiumUsers[key].daysRemaining = 0; // Set masa berlaku menjadi 0
+                    premiumUsers[key].isExpired = true; // Tandai sebagai expired
+                }
+            }
+            // Bersihkan status di localStorage
+            localStorage.removeItem('premiumStatus');
         }
 
         // Cek status premium saat halaman dimuat
@@ -455,20 +469,27 @@
             if (premiumUsers[passwordInput]) {
                 const user = premiumUsers[passwordInput];
 
+                // Logout pengguna sebelumnya jika ada
                 if (user.isLoggedIn) {
                     loginMessage.style.color = '#FF0000';
                     loginMessage.textContent = 'Password telah digunakan pengguna lain.';
-                } else if (user.daysRemaining > 0) {
+                } else if (user.isExpired) {
+                    loginMessage.style.color = '#FF0000';
+                    loginMessage.textContent = 'Password telah kedaluwarsa dan tidak dapat digunakan lagi.';
+                } else {
+                    // Logout pengguna sebelumnya jika ada
+                    logoutPreviousUser();
+
+                    // Set pengguna baru sebagai login
                     isPremium = true;
+                    user.isLoggedIn = true;
+                    user.daysRemaining = 0; // Set masa berlaku menjadi 0
                     savePremiumStatus(passwordInput);
                     loginMessage.style.color = '#00FF00';
                     loginMessage.textContent = 'Password Benar! Anda sekarang Premium.';
                     expiryMessage.textContent = `Masa berlaku premium: ${user.daysRemaining} hari tersisa.`;
                     document.getElementById('loginPremiumBtn').style.display = 'none';
                     document.getElementById('floatingPopup').style.display = 'none';
-                } else {
-                    loginMessage.style.color = '#FF0000';
-                    loginMessage.textContent = 'Password Salah! Masa berlaku premium sudah kedaluwarsa.';
                 }
             } else {
                 loginMessage.style.color = '#FF0000';
