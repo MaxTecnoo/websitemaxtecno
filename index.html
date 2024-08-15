@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website MaxTecno</title>
+    <title>Download Page</title>
     <style>
         body {
             background-color: #000000;
@@ -315,11 +315,12 @@
                 <p>GENERATE FOTO ✅</p>
                 <p>PREMIUM FEATURE ✅</p>
                 <p>NO LOGIN ✅</p>
+                <p>UPDATE : YES/V.2 RILIS ✅</p>
             </div>
             <button class="download-btn" type="button" aria-label="Toggle download options for GPT-4o MOD">Download</button>
             <div class="version-options">
-                <button type="button" data-link="https://sfl.gl/23YpKrIA">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👤[FREE MODE]</button>
-                <button class="premium-download-btn" type="button" data-link="https://www.mediafire.com/file/pkiflqbjaawlpt7/ChatOn_v1.43.441-438_%2528PREMIUM%2529.apk/file">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👑[PREMIUM MODE]</button>
+                <button type="button" data-link="https://sfl.gl/qUCKqm">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👤[FREE MODE]</button>
+                <button class="premium-download-btn" type="button" data-link="https://www.mediafire.com/file/acymzajs91xumyv/Gpt-4o_V2.apk/file">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👑[PREMIUM MODE]</button>
             </div>
         </div>
     </div>
@@ -388,24 +389,55 @@
     </div>
     <script>
         const premiumUsers = {
-    "jar": { 
-        password: "jar", 
-        daysRemaining: 30
-    },
-    "ambatron": {
-        password: "ambatron",
-        daysRemaining: 1
-    }
-};
+            "jar": { 
+                password: "jar", 
+                daysRemaining: 30
+            },
+            "ambatron": {
+                password: "ambatron",
+                daysRemaining: 1
+            }
+        };
 
-document.getElementById('buyPremiumBtn').addEventListener('click', function() {
-    document.getElementById('premiumListPopup').style.display = 'block';
-});
-
-document.getElementById('closePremiumListPopup').addEventListener('click', function() {
-    document.getElementById('premiumListPopup').style.display = 'none';
-});
         let isPremium = false;
+
+        // Cek status premium saat halaman dimuat
+        function checkPremiumStatus() {
+            const savedStatus = localStorage.getItem('premiumStatus');
+            if (savedStatus) {
+                const { isPremium, daysRemaining } = JSON.parse(savedStatus);
+                if (daysRemaining > 0) {
+                    return { isPremium: true, daysRemaining };
+                }
+            }
+            return { isPremium: false, daysRemaining: 0 };
+        }
+
+        // Simpan status premium ke localStorage
+        function savePremiumStatus(password) {
+            const user = premiumUsers[password];
+            localStorage.setItem('premiumStatus', JSON.stringify({
+                isPremium: true,
+                daysRemaining: user.daysRemaining
+            }));
+        }
+
+        // Cek status premium saat halaman dimuat
+        const status = checkPremiumStatus();
+        isPremium = status.isPremium;
+
+        if (isPremium) {
+            document.getElementById('loginPremiumBtn').style.display = 'none';
+            document.getElementById('expiryMessage').textContent = `Masa berlaku premium: ${status.daysRemaining} hari tersisa.`;
+        }
+
+        document.getElementById('buyPremiumBtn').addEventListener('click', function() {
+            document.getElementById('premiumListPopup').style.display = 'block';
+        });
+
+        document.getElementById('closePremiumListPopup').addEventListener('click', function() {
+            document.getElementById('premiumListPopup').style.display = 'none';
+        });
 
         document.getElementById('loginPremiumBtn').addEventListener('click', function() {
             document.getElementById('floatingPopup').style.display = 'block';
@@ -421,6 +453,7 @@ document.getElementById('closePremiumListPopup').addEventListener('click', funct
 
                 if (user.daysRemaining > 0) {
                     isPremium = true;
+                    savePremiumStatus(passwordInput);
                     loginMessage.style.color = '#00FF00';
                     loginMessage.textContent = 'Password Benar! Anda sekarang Premium.';
                     expiryMessage.textContent = `Masa berlaku premium: ${user.daysRemaining} hari tersisa.`;
