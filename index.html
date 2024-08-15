@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Page</title>
+    <title>MaxTecno Website</title>
     <style>
         body {
             background-color: #000000;
@@ -393,13 +393,15 @@
                 password: "jar", 
                 daysRemaining: 30,
                 isLoggedIn: false,
-                isExpired: false
+                isExpired: false,
+                username: ""
             },
             "ambatron": {
                 password: "ambatron",
                 daysRemaining: 1,
                 isLoggedIn: false,
-                isExpired: false
+                isExpired: false,
+                username: ""
             }
         };
 
@@ -421,16 +423,16 @@
         function savePremiumStatus(username) {
             const user = premiumUsers[username];
             localStorage.setItem('premiumStatus', JSON.stringify({
-                username: username,
+                username: user.username,
                 isPremium: true,
                 daysRemaining: user.daysRemaining
             }));
         }
 
-        // Logout pengguna yang sudah login
-        function logoutPreviousUser() {
+        // Logout semua pengguna dengan password yang sama
+        function logoutUsersWithSamePassword(password) {
             for (const key in premiumUsers) {
-                if (premiumUsers[key].isLoggedIn) {
+                if (premiumUsers[key].password === password) {
                     premiumUsers[key].isLoggedIn = false; // Logout pengguna yang sedang login
                     premiumUsers[key].daysRemaining = 0; // Set masa berlaku menjadi 0
                     premiumUsers[key].isExpired = true; // Tandai sebagai expired
@@ -469,16 +471,19 @@
             if (premiumUsers[passwordInput]) {
                 const user = premiumUsers[passwordInput];
 
-                // Logout pengguna sebelumnya jika ada
+                // Logout pengguna sebelumnya dengan password yang sama
                 if (user.isLoggedIn) {
                     loginMessage.style.color = '#FF0000';
-                    loginMessage.textContent = 'Password telah digunakan pengguna lain.';
+                    loginMessage.textContent = 'Password telah digunakan oleh pengguna lain.';
                 } else if (user.isExpired) {
                     loginMessage.style.color = '#FF0000';
                     loginMessage.textContent = 'Password telah kedaluwarsa dan tidak dapat digunakan lagi.';
                 } else {
-                    // Logout pengguna sebelumnya jika ada
-                    logoutPreviousUser();
+                    // Logout semua pengguna dengan password yang sama
+                    logoutUsersWithSamePassword(user.password);
+
+                    // Buat username acak untuk pengguna baru
+                    user.username = `User_${Math.floor(Math.random() * 10000)}`; // Contoh username acak
 
                     // Set pengguna baru sebagai login
                     isPremium = true;
@@ -486,7 +491,7 @@
                     user.daysRemaining = 0; // Set masa berlaku menjadi 0
                     savePremiumStatus(passwordInput);
                     loginMessage.style.color = '#00FF00';
-                    loginMessage.textContent = 'Password Benar! Anda sekarang Premium.';
+                    loginMessage.textContent = `Password Benar! Anda sekarang Premium dengan username: ${user.username}.`;
                     expiryMessage.textContent = `Masa berlaku premium: ${user.daysRemaining} hari tersisa.`;
                     document.getElementById('loginPremiumBtn').style.display = 'none';
                     document.getElementById('floatingPopup').style.display = 'none';
@@ -511,33 +516,4 @@
             var items = document.querySelectorAll('.download-item');
             items.forEach(function(item) {
                 var name = item.querySelector('h2').textContent.toLowerCase();
-                item.style.display = name.indexOf(searchVal) !== -1 ? 'flex' : 'none';
-            });
-        });
-
-        var downloadBtns = document.querySelectorAll('.download-btn');
-        downloadBtns.forEach(function(btn) {
-            btn.addEventListener('click', function(e) {
-                var versionOptions = e.target.nextElementSibling;
-                versionOptions.style.display = versionOptions.style.display === 'block' ? 'none' : 'block';
-            });
-        });
-
-        var versionBtns = document.querySelectorAll('.version-options button');
-        versionBtns.forEach(function(btn) {
-            btn.addEventListener('click', function(e) {
-                var link = e.target.getAttribute('data-link');
-                if (e.target.classList.contains('premium-download-btn')) {
-                    if (isPremium) {
-                        window.location.href = link;
-                    } else {
-                        document.getElementById('notPremiumPopup').style.display = 'block';
-                    }
-                } else {
-                    window.location.href = link;
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+                item.style.display = name.indexOf(searchVal) !== -1
