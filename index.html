@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MaxTecno Web</title>
+    <title>Download Page</title>
     <style>
         body {
             background-color: #000000;
@@ -392,16 +392,12 @@
             "jar": { 
                 password: "jar", 
                 daysRemaining: 30,
-                isLoggedIn: false,
-                isExpired: false,
-                username: ""
+                isLoggedIn: false
             },
-            "jahwir": {
-                password: "jahwir",
-                daysRemaining: 30,
-                isLoggedIn: false,
-                isExpired: false,
-                username: ""
+            "ambatron": {
+                password: "ambatron",
+                daysRemaining: 1,
+                isLoggedIn: false
             }
         };
 
@@ -423,23 +419,11 @@
         function savePremiumStatus(username) {
             const user = premiumUsers[username];
             localStorage.setItem('premiumStatus', JSON.stringify({
-                username: user.username,
+                username: username,
                 isPremium: true,
                 daysRemaining: user.daysRemaining
             }));
-        }
-
-        // Logout semua pengguna dengan password yang sama
-        function logoutUsersWithSamePassword(password) {
-            for (const key in premiumUsers) {
-                if (premiumUsers[key].password === password) {
-                    premiumUsers[key].isLoggedIn = false; // Logout pengguna yang sedang login
-                    premiumUsers[key].daysRemaining = 0; // Set masa berlaku menjadi 0
-                    premiumUsers[key].isExpired = true; // Tandai sebagai expired
-                }
-            }
-            // Bersihkan status di localStorage
-            localStorage.removeItem('premiumStatus');
+            user.isLoggedIn = true; // Tandai pengguna sebagai login
         }
 
         // Cek status premium saat halaman dimuat
@@ -471,36 +455,20 @@
             if (premiumUsers[passwordInput]) {
                 const user = premiumUsers[passwordInput];
 
-                // Logout pengguna sebelumnya dengan password yang sama
                 if (user.isLoggedIn) {
                     loginMessage.style.color = '#FF0000';
-                    loginMessage.textContent = 'Password telah digunakan oleh pengguna lain.';
-                    setTimeout(() => {
-                        location.reload(); // Reload halaman setelah menampilkan pesan
-                    }, 2000); // Tunggu 2 detik sebelum refresh
-                } else if (user.isExpired) {
-                    loginMessage.style.color = '#FF0000';
-                    loginMessage.textContent = 'Password telah kedaluwarsa dan tidak dapat digunakan lagi.';
-                    setTimeout(() => {
-                        location.reload(); // Reload halaman setelah menampilkan pesan
-                    }, 2000); // Tunggu 2 detik sebelum refresh
-                } else {
-                    // Logout semua pengguna dengan password yang sama
-                    logoutUsersWithSamePassword(user.password);
-
-                    // Buat username acak untuk pengguna baru
-                    user.username = `User_${Math.floor(Math.random() * 10000)}`; // Contoh username acak
-
-                    // Set pengguna baru sebagai login
+                    loginMessage.textContent = 'Password telah digunakan pengguna lain.';
+                } else if (user.daysRemaining > 0) {
                     isPremium = true;
-                    user.isLoggedIn = true;
-                    user.daysRemaining = 0; // Set masa berlaku menjadi 0
                     savePremiumStatus(passwordInput);
                     loginMessage.style.color = '#00FF00';
-                    loginMessage.textContent = `Password Benar! Anda sekarang Premium dengan username: ${user.username}.`;
+                    loginMessage.textContent = 'Password Benar! Anda sekarang Premium.';
                     expiryMessage.textContent = `Masa berlaku premium: ${user.daysRemaining} hari tersisa.`;
                     document.getElementById('loginPremiumBtn').style.display = 'none';
                     document.getElementById('floatingPopup').style.display = 'none';
+                } else {
+                    loginMessage.style.color = '#FF0000';
+                    loginMessage.textContent = 'Password Salah! Masa berlaku premium sudah kedaluwarsa.';
                 }
             } else {
                 loginMessage.style.color = '#FF0000';
