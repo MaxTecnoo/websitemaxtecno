@@ -585,14 +585,13 @@
 
         // Logout Premium
         document.getElementById('logoutPremiumBtn').addEventListener('click', function() {
-            // Reset status login
-            const loggedInUser = Object.keys(premiumUsers).find(email => premiumUsers[email].isLoggedIn);
-            if (loggedInUser) {
-                premiumUsers[loggedInUser].isLoggedIn = false; // Tandai pengguna sebagai logout
-                isPremium = false; // Set status premium ke false
+            const loggedInUserEmail = Object.keys(premiumUsers).find(email => premiumUsers[email].isLoggedIn);
+            if (loggedInUserEmail) {
+                // Reset status login dan hapus dari localStorage
+                premiumUsers[loggedInUserEmail].isLoggedIn = false; // Tandai pengguna sebagai logout
                 localStorage.removeItem('premiumStatus'); // Hapus status premium dari localStorage
 
-                // Refresh halaman untuk menampilkan kembali tombol login premium
+                // Refresh halaman untuk menampilkan kembali tampilan awal
                 location.reload();
             }
         });
