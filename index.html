@@ -156,7 +156,7 @@
             margin: 20px 0;
             text-align: center;
         }
-        .login-button {
+        .login-button, .logout-button {
             background-color: #FFD700;
             color: #000;
             font-weight: bold;
@@ -166,7 +166,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        .login-button:hover {
+        .login-button:hover, .logout-button:hover {
             background-color: #FFC107;
         }
         .floating-popup {
@@ -271,6 +271,7 @@
         <a class="youtube-btn" href="https://youtube.com/@maxtecnoo?si=WhIdupkhm85Xn4no" target="_blank">YouTube</a>
         <a class="telegram-btn" href="https://chat.whatsapp.com/I3g1qDBAGKQ4t7YWcDQUG9" target="_blank">Whatsapp Grup</a>
         <button class="login-button" id="loginPremiumBtn">Login Premium</button>
+        <button class="logout-button" id="logoutPremiumBtn" style="display: none;">Logout Premium</button>
     </div>
     <input type="text" id="search" placeholder="Search...">
     <button class="buy-premium-button" id="buyPremiumBtn">Beli Premium</button>
@@ -396,37 +397,32 @@
     </div>
     <script>
         const premiumUsers = {
-    "user1@gmail.com": { 
-        password: "password1", 
-        daysRemaining: 30,
-        isLoggedIn: false
-    },
-    "user2@gmail.com": {
-        password: "password2",
-        daysRemaining: 30,
-        isLoggedIn: false
-    },
-     "user2@gmail.com": {
-        password: "password2",
-        daysRemaining: 30,
-        isLoggedIn: false
-    },
-    "user3@gmail.com": {
-        password: "password3",
-        daysRemaining: 30,
-        isLoggedIn: false
-    },
-    "user4@gmail.com": {
-        password: "pass4",
-        daysRemaining: 30,
-        isLoggedIn: false
-    },
-    "user5@gmail.com": {
-        password: "password5",
-        daysRemaining: 30,
-        isLoggedIn: false
-    }
-};
+            "user1@gmail.com": { 
+                password: "password1", 
+                daysRemaining: 30,
+                isLoggedIn: false
+            },
+            "user2@gmail.com": {
+                password: "password2",
+                daysRemaining: 30,
+                isLoggedIn: false
+            },
+            "user3@gmail.com": {
+                password: "password3",
+                daysRemaining: 30,
+                isLoggedIn: false
+            },
+            "user4@gmail.com": {
+                password: "pass4",
+                daysRemaining: 30,
+                isLoggedIn: false
+            },
+            "user5@gmail.com": {
+                password: "password5",
+                daysRemaining: 30,
+                isLoggedIn: false
+            }
+        };
 
         let isPremium = false;
 
@@ -459,6 +455,7 @@
 
         if (isPremium) {
             document.getElementById('loginPremiumBtn').style.display = 'none';
+            document.getElementById('logoutPremiumBtn').style.display = 'inline-block';
             document.getElementById('expiryMessage').textContent = `Masa berlaku premium: ${status.daysRemaining} hari tersisa.`;
         }
 
@@ -531,6 +528,7 @@
                         loginMessage.textContent = 'Login berhasil! Anda sekarang Premium.';
                         expiryMessage.textContent = `Masa berlaku premium: ${user.daysRemaining} hari tersisa.`;
                         document.getElementById('loginPremiumBtn').style.display = 'none';
+                        document.getElementById('logoutPremiumBtn').style.display = 'inline-block'; // Tampilkan tombol logout
                         document.getElementById('loginPopup').style.display = 'none';
                     }
                 } else {
@@ -583,6 +581,20 @@
                     window.location.href = link;
                 }
             });
+        });
+
+        // Logout Premium
+        document.getElementById('logoutPremiumBtn').addEventListener('click', function() {
+            // Reset status login
+            const loggedInUser = Object.keys(premiumUsers).find(email => premiumUsers[email].isLoggedIn);
+            if (loggedInUser) {
+                premiumUsers[loggedInUser].isLoggedIn = false; // Tandai pengguna sebagai logout
+                isPremium = false; // Set status premium ke false
+                localStorage.removeItem('premiumStatus'); // Hapus status premium dari localStorage
+
+                // Refresh halaman untuk menampilkan kembali tombol login premium
+                location.reload();
+            }
         });
     </script>
 </body>
