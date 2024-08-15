@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Page</title>
+    <title>MaxTecno Web</title>
     <style>
         body {
             background-color: #000000;
@@ -475,9 +475,15 @@
                 if (user.isLoggedIn) {
                     loginMessage.style.color = '#FF0000';
                     loginMessage.textContent = 'Password telah digunakan oleh pengguna lain.';
+                    setTimeout(() => {
+                        location.reload(); // Reload halaman setelah menampilkan pesan
+                    }, 2000); // Tunggu 2 detik sebelum refresh
                 } else if (user.isExpired) {
                     loginMessage.style.color = '#FF0000';
                     loginMessage.textContent = 'Password telah kedaluwarsa dan tidak dapat digunakan lagi.';
+                    setTimeout(() => {
+                        location.reload(); // Reload halaman setelah menampilkan pesan
+                    }, 2000); // Tunggu 2 detik sebelum refresh
                 } else {
                     // Logout semua pengguna dengan password yang sama
                     logoutUsersWithSamePassword(user.password);
