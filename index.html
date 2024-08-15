@@ -228,41 +228,41 @@
                 padding: 8px;
             }
         }
-            .buy-premium-button {
-    display: block;
-    margin: 20px auto;
-    background-color: #FF69B4;
-    color: #FFF;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-}
+        .buy-premium-button {
+            display: block;
+            margin: 20px auto;
+            background-color: #FF69B4;
+            color: #FFF;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
 
-.buy-premium-button:hover {
-    background-color: #FF1493;
-    transform: scale(1.05);
-}
+        .buy-premium-button:hover {
+            background-color: #FF1493;
+            transform: scale(1.05);
+        }
 
-#premiumListPopup {
-    display: none;
-}
+        #premiumListPopup {
+            display: none;
+        }
 
-.buy-button {
-    background-color: #32CD32;
-    color: #FFF;
-    border: none;
-    padding: 10px 20px;
-    margin-top: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
+        .buy-button {
+            background-color: #32CD32;
+            color: #FFF;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
 
-.buy-button:hover {
-    background-color: #228B22;
-}
+        .buy-button:hover {
+            background-color: #228B22;
+        }
     </style>
 </head>
 <body>
@@ -275,15 +275,15 @@
     <input type="text" id="search" placeholder="Search...">
     <button class="buy-premium-button" id="buyPremiumBtn">Beli Premium</button>
 
-<div class="floating-popup" id="premiumListPopup">
-    <h3>HARGA PREMIUM LIST</h3>
-    <p>10K » 15 HARI VIP👑</p>
-    <p>30K » 45 HARI VIP👑</p>
-    <p>50K » PERMANEN VIP👑</p>
-    <p>Klik beli akan di arahkan ke WhatsApp admin dan chat admin nya untuk membeli<p>
-    <button class="buy-button" onclick="window.location.href='https://api.whatsapp.com/send/?phone=%2B6285738238937&text&type=phone_number&app_absent=0'">Beli</button>
-    <button class="close-popup" id="closePremiumListPopup">Tutup</button>
-</div>
+    <div class="floating-popup" id="premiumListPopup">
+        <h3>HARGA PREMIUM LIST</h3>
+        <p>10K » 15 HARI VIP👑</p>
+        <p>30K » 45 HARI VIP👑</p>
+        <p>50K » PERMANEN VIP👑</p>
+        <p>Klik beli akan di arahkan ke WhatsApp admin dan chat admin nya untuk membeli<p>
+        <button class="buy-button" onclick="window.location.href='https://api.whatsapp.com/send/?phone=%2B6285738238937&text&type=phone_number&app_absent=0'">Beli</button>
+        <button class="close-popup" id="closePremiumListPopup">Tutup</button>
+    </div>
     <div class="info-text">
         [FREE MODE]👤 » LINK AKAN BERISI IKLAN MAKA DARI ITU KAMU HARUS MELEWATI IKLAN UNTUK MENDOWNLOAD NYA
     </div>
@@ -293,14 +293,20 @@
     
     <!-- Floating Popup -->
     <div class="floating-popup" id="floatingPopup">
-    <h3>Login Premium</h3>
-    <input type="email" id="premiumEmail" placeholder="Masukkan Email" required>
-    <input type="password" id="premiumPassword" placeholder="Masukkan Password" required>
-    <button id="submitLogin">Login</button>
-    <button class="close-popup" id="closePopup">Tutup</button>
-    <div id="loginMessage" style="margin-top: 10px; color: #FF0000; display: none;"></div>
-    <div class="expiry-message" id="expiryMessage"></div>
-</div>
+        <h3>Peringatan!!!</h3>
+        <p>Email dan password di dapatkan saat kamu sudah membeli premium</p>
+        <div id="countdown"></div>
+    </div>
+
+    <div class="floating-popup" id="loginPopup">
+        <h3>Login Premium</h3>
+        <input type="email" id="premiumEmail" placeholder="Masukkan Email" required>
+        <input type="password" id="premiumPassword" placeholder="Masukkan Password" required>
+        <button id="submitLogin">Login</button>
+        <button class="close-popup" id="closeLoginPopup">Tutup</button>
+        <div id="loginMessage" style="margin-top: 10px; color: #FF0000; display: none;"></div>
+        <div class="expiry-message" id="expiryMessage"></div>
+    </div>
 
     <div class="floating-popup" id="notPremiumPopup">
         <p>Kamu belum premium bahkan belum login sekalipun. Beli premium untuk akses.</p>
@@ -400,6 +406,11 @@
         daysRemaining: 30,
         isLoggedIn: false
     },
+     "user2@gmail.com": {
+        password: "password2",
+        daysRemaining: 30,
+        isLoggedIn: false
+    },
     "user3@gmail.com": {
         password: "password3",
         daysRemaining: 30,
@@ -461,66 +472,80 @@
 
         document.getElementById('loginPremiumBtn').addEventListener('click', function() {
             document.getElementById('floatingPopup').style.display = 'block';
+            let countdown = 5;
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.textContent = `Form login akan muncul dalam ${countdown} detik...`;
+
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = `Form login akan muncul dalam ${countdown} detik...`;
+
+                if (countdown === 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('floatingPopup').style.display = 'none';
+                    document.getElementById('loginPopup').style.display = 'block';
+                }
+            }, 1000);
         });
 
         document.getElementById('submitLogin').addEventListener('click', function() {
-    const emailInput = document.getElementById('premiumEmail').value;
-    const passwordInput = document.getElementById('premiumPassword').value;
-    const loginMessage = document.getElementById('loginMessage');
-    const expiryMessage = document.getElementById('expiryMessage');
+            const emailInput = document.getElementById('premiumEmail').value;
+            const passwordInput = document.getElementById('premiumPassword').value;
+            const loginMessage = document.getElementById('loginMessage');
+            const expiryMessage = document.getElementById('expiryMessage');
 
-    // Reset pesan login
-    loginMessage.style.display = 'none';
+            // Reset pesan login
+            loginMessage.style.display = 'none';
 
-    // Validasi email
-    if (!emailInput.endsWith('@gmail.com')) {
-        loginMessage.style.color = '#FF0000';
-        loginMessage.textContent = 'Email harus menggunakan domain @gmail.com.';
-        loginMessage.style.display = 'block';
-        return;
-    }
-
-    // Cek apakah email ada di premiumUsers
-    const user = premiumUsers[emailInput];
-    if (user) {
-        if (user.daysRemaining <= 0) {
-            // Masa berlaku premium habis, arahkan ke input baru
-            loginMessage.style.color = '#FF0000';
-            loginMessage.textContent = 'Akun sudah kedaluwarsa. Silakan masukkan email dan password baru.';
-            loginMessage.style.display = 'block';
-            // Reset status login
-            user.isLoggedIn = false; 
-            return;
-        }
-
-        // Cek password
-        if (user.password === passwordInput) {
-            if (user.isLoggedIn) {
+            // Validasi email
+            if (!emailInput.endsWith('@gmail.com')) {
                 loginMessage.style.color = '#FF0000';
-                loginMessage.textContent = 'Akun sudah digunakan oleh pengguna lain.';
-            } else {
-                isPremium = true;
-                savePremiumStatus(emailInput);
-                user.isLoggedIn = true; // Tandai pengguna sebagai login
-                loginMessage.style.color = '#00FF00';
-                loginMessage.textContent = 'Login berhasil! Anda sekarang Premium.';
-                expiryMessage.textContent = `Masa berlaku premium: ${user.daysRemaining} hari tersisa.`;
-                document.getElementById('loginPremiumBtn').style.display = 'none';
-                document.getElementById('floatingPopup').style.display = 'none';
+                loginMessage.textContent = 'Email harus menggunakan domain @gmail.com.';
+                loginMessage.style.display = 'block';
+                return;
             }
-        } else {
-            loginMessage.style.color = '#FF0000';
-            loginMessage.textContent = 'Email atau password salah! Silahkan coba lagi.';
-        }
-    } else {
-        loginMessage.style.color = '#FF0000';
-        loginMessage.textContent = 'Email atau password salah! Silahkan coba lagi.';
-    }
-    loginMessage.style.display = 'block';
-});
 
-        document.getElementById('closePopup').addEventListener('click', function() {
-            document.getElementById('floatingPopup').style.display = 'none';
+            // Cek apakah email ada di premiumUsers
+            const user = premiumUsers[emailInput];
+            if (user) {
+                if (user.daysRemaining <= 0) {
+                    // Masa berlaku premium habis, arahkan ke input baru
+                    loginMessage.style.color = '#FF0000';
+                    loginMessage.textContent = 'Akun sudah kedaluwarsa. Silakan masukkan email dan password baru.';
+                    loginMessage.style.display = 'block';
+                    // Reset status login
+                    user.isLoggedIn = false; 
+                    return;
+                }
+
+                // Cek password
+                if (user.password === passwordInput) {
+                    if (user.isLoggedIn) {
+                        loginMessage.style.color = '#FF0000';
+                        loginMessage.textContent = 'Akun sudah digunakan oleh pengguna lain.';
+                    } else {
+                        isPremium = true;
+                        savePremiumStatus(emailInput);
+                        user.isLoggedIn = true; // Tandai pengguna sebagai login
+                        loginMessage.style.color = '#00FF00';
+                        loginMessage.textContent = 'Login berhasil! Anda sekarang Premium.';
+                        expiryMessage.textContent = `Masa berlaku premium: ${user.daysRemaining} hari tersisa.`;
+                        document.getElementById('loginPremiumBtn').style.display = 'none';
+                        document.getElementById('loginPopup').style.display = 'none';
+                    }
+                } else {
+                    loginMessage.style.color = '#FF0000';
+                    loginMessage.textContent = 'Email atau password salah! Silahkan coba lagi.';
+                }
+            } else {
+                loginMessage.style.color = '#FF0000';
+                loginMessage.textContent = 'Email atau password salah! Silahkan coba lagi.';
+            }
+            loginMessage.style.display = 'block';
+        });
+
+        document.getElementById('closeLoginPopup').addEventListener('click', function() {
+            document.getElementById('loginPopup').style.display = 'none';
         });
 
         document.getElementById('closeNotPremiumPopup').addEventListener('click', function() {
