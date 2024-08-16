@@ -285,6 +285,28 @@
         .buy-button:hover {
             background-color: #228B22;
         }
+
+        /* Floating popup untuk pesan informasi login */
+        .info-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #000;
+            color: #FFD700;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1002;
+            font-weight: bold;
+            text-align: center;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translate(-50%, -150%); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -336,6 +358,11 @@
         <button class="close-popup" id="closeNotPremiumPopup">Tutup</button>
     </div>
 
+    <!-- Popup informasi login -->
+    <div class="info-popup" id="loginInfoPopup">
+        Email dan password akan di beri admin jika kamu sudah beli premium👑
+    </div>
+
     <div class="download-item" data-name="GPT-4o MOD">
         <img src="https://gcdnb.pbrd.co/images/1Noydq7w6PYu.jpg?o=1" alt="GPT-4o MOD Image">
         <div class="content">
@@ -345,7 +372,7 @@
                 <p>GENERATE FOTO ✅</p>
                 <p>PREMIUM FEATURE ✅</p>
                 <p>NO LOGIN ✅</p>
-                <p>UPDATE : YES/V.2 RILIS ✅</p>
+                <p>UPDATE : YES | V.2</p>
             </div>
             <button class="download-btn" type="button" aria-label="Toggle download options for GPT-4o MOD">Download</button>
             <div class="version-options">
@@ -363,6 +390,7 @@
                 <p>UNEXPECTED FAILURE FIX ✅</p>
                 <p>TAMPILAN BARU ✅</p>
                 <p>FULL TABLE ✅</p>
+                <p>UPDATE : NOT FOUND</p>
             </div>
             <button class="download-btn" type="button" aria-label="Toggle download options for SET EDIT MOD">Download</button>
             <div class="version-options">
@@ -380,6 +408,7 @@
                 <p>UNLIMITED LEVEL ✅</p>
                 <p>UNLIMITED ALL ✅</p>
                 <p>SPECIAL EDITION ✅</p>
+                <p>UPDATE : NOT FOUND</p>
             </div>
             <button class="download-btn" type="button" aria-label="Toggle download options for SHADOW FIGHT 2 MOD MENU">Download</button>
             <div class="version-options">
@@ -396,6 +425,7 @@
                 <p>FPS FREE FIRE BOOST ✅</p>
                 <p>MAIN FF LANCAR JAYA ✅</p>
                 <p>ANTI PATAH PATAH SAAT BERMAIN ✅</p>
+                <p>UPDATE: NOT FOUND</p>
             </div>
             <button class="download-btn" type="button" aria-label="Toggle download options for MODULE BREVENT FF">Download</button>
             <div class="version-options">
@@ -411,168 +441,177 @@
     <script>
         const premiumUsers = {
             "user1@gmail.com": {
-            password: "password1", 
-            daysRemaining: 30
-        },
-        "user2@gmail.com": {
-            password: "password2",
-            daysRemaining: 30
-        },
-        "user3@gmail.com": {
-            password: "password3",
-            daysRemaining: 30
-        },
-        "user4@gmail.com": {
-            password: "pass4",
-            daysRemaining: 30
-        },
-        "user5@gmail.com": {
-            password: "password5",
-            daysRemaining: 30
-        }
-    };
+                password: "password1",
+                daysRemaining: 30
+            },
+            "user2@gmail.com": {
+                password: "password2",
+                daysRemaining: 30
+            },
+            "user3@gmail.com": {
+                password: "password3",
+                daysRemaining: 30
+            },
+            "user4@gmail.com": {
+                password: "pass4",
+                daysRemaining: 30
+            },
+            "user5@gmail.com": {
+                password: "password5",
+                daysRemaining: 30
+            }
+        };
 
-    // Load data dari localStorage
-    const savedEmail = localStorage.getItem('premiumEmail');
-    const savedPassword = localStorage.getItem('premiumPassword');
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        // Load data dari localStorage
+        const savedEmail = localStorage.getItem('premiumEmail');
+        const savedPassword = localStorage.getItem('premiumPassword');
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
-    // Menyembunyikan form login jika pengguna sudah login
-    if (isLoggedIn) {
-        document.getElementById('loginPremiumBtn').style.display = 'none';
-        document.getElementById('logoutPremiumBtn').style.display = 'inline-block';
-        document.getElementById('premiumEmail').value = savedEmail;
-        document.getElementById('premiumPassword').value = savedPassword;
-        document.getElementById('loginPopup').style.display = 'block'; // Langsung tampilkan form login
-    }
-
-    document.getElementById('buyPremiumBtn').addEventListener('click', function() {
-        document.getElementById('premiumListPopup').style.display = 'block';
-    });
-
-    document.getElementById('closePremiumListPopup').addEventListener('click', function() {
-        document.getElementById('premiumListPopup').style.display = 'none';
-    });
-
-    document.getElementById('loginPremiumBtn').addEventListener('click', function() {
-        // Tidak perlu countdown, langsung tampilkan form login
-        document.getElementById('loginPopup').style.display = 'block';
-    });
-
-    document.getElementById('submitLogin').addEventListener('click', function() {
-        const emailInput = document.getElementById('premiumEmail').value;
-        const passwordInput = document.getElementById('premiumPassword').value;
-        const loginMessage = document.getElementById('loginMessage');
-        const expiryMessage = document.getElementById('expiryMessage');
-
-        // Reset pesan login
-        loginMessage.style.display = 'none';
-
-        // Validasi email
-        if (!emailInput.endsWith('@gmail.com')) {
-            loginMessage.style.color = '#FF0000';
-            loginMessage.textContent = 'Email harus menggunakan domain @gmail.com.';
-            loginMessage.style.display = 'block';
-            return;
+        // Menyembunyikan form login jika pengguna sudah login
+        if (isLoggedIn) {
+            document.getElementById('loginPremiumBtn').style.display = 'none';
+            document.getElementById('logoutPremiumBtn').style.display = 'inline-block';
+            document.getElementById('premiumEmail').value = savedEmail;
+            document.getElementById('premiumPassword').value = savedPassword;
         }
 
-        // Cek apakah email ada di premiumUsers
-        const user = premiumUsers[emailInput];
-        if (user) {
-            // Cek password
-            if (user.password === passwordInput) {
-                loginMessage.style.color = '#00FF00';
-                loginMessage.textContent = 'Login berhasil! Anda sekarang Premium.';
-                expiryMessage.textContent = `Masa berlaku premium: ${user.daysRemaining} hari.`;
-                document.getElementById('loginPremiumBtn').style.display = 'none';
-                document.getElementById('logoutPremiumBtn').style.display = 'inline-block'; // Tampilkan tombol logout
-                document.getElementById('loginPopup').style.display = 'none'; // Sembunyikan popup login
-                showSuccessMessage(); // Tampilkan pesan sukses login
+        document.getElementById('buyPremiumBtn').addEventListener('click', function() {
+            document.getElementById('premiumListPopup').style.display = 'block';
+        });
 
-                // Simpan informasi login di localStorage
-                localStorage.setItem('premiumEmail', emailInput);
-                localStorage.setItem('premiumPassword', passwordInput);
-                localStorage.setItem('isLoggedIn', 'true');
+        document.getElementById('closePremiumListPopup').addEventListener('click', function() {
+            document.getElementById('premiumListPopup').style.display = 'none';
+        });
+
+        document.getElementById('loginPremiumBtn').addEventListener('click', function() {
+            // Cek apakah pengguna sudah pernah login sebelumnya
+            if (!isLoggedIn) {
+                // Tampilkan popup informasi login
+                const loginInfoPopup = document.getElementById('loginInfoPopup');
+                loginInfoPopup.style.display = 'block';
+                setTimeout(() => {
+                    loginInfoPopup.style.display = 'none';
+                    document.getElementById('loginPopup').style.display = 'block';
+                },2500); // Tampilkan popup selama 5 detik, lalu tampilkan form login
+            } else {
+                document.getElementById('loginPopup').style.display = 'block';
+            }
+        });
+
+        document.getElementById('submitLogin').addEventListener('click', function() {
+            const emailInput = document.getElementById('premiumEmail').value;
+            const passwordInput = document.getElementById('premiumPassword').value;
+            const loginMessage = document.getElementById('loginMessage');
+            const expiryMessage = document.getElementById('expiryMessage');
+
+            // Reset pesan login
+            loginMessage.style.display = 'none';
+
+            // Validasi email
+            if (!emailInput.endsWith('@gmail.com')) {
+                loginMessage.style.color = '#FF0000';
+                loginMessage.textContent = 'Email harus menggunakan domain @gmail.com.';
+                loginMessage.style.display = 'block';
+                return;
+            }
+
+            // Cek apakah email ada di premiumUsers
+            const user = premiumUsers[emailInput];
+            if (user) {
+                // Cek password
+                if (user.password === passwordInput) {
+                    loginMessage.style.color = '#00FF00';
+                    loginMessage.textContent = 'Login berhasil! Anda sekarang Premium.';
+                    expiryMessage.textContent = `Masa berlaku premium: ${user.daysRemaining} hari.`;
+                    document.getElementById('loginPremiumBtn').style.display = 'none';
+                    document.getElementById('logoutPremiumBtn').style.display = 'inline-block'; // Tampilkan tombol logout
+                    document.getElementById('loginPopup').style.display = 'none'; // Sembunyikan popup login
+                    showSuccessMessage(); // Tampilkan pesan sukses login
+
+                    // Simpan informasi login di localStorage
+                    localStorage.setItem('premiumEmail', emailInput);
+                    localStorage.setItem('premiumPassword', passwordInput);
+                    localStorage.setItem('isLoggedIn', 'true');
+                } else {
+                    loginMessage.style.color = '#FF0000';
+                    loginMessage.textContent = 'Email atau password salah! Silahkan coba lagi.';
+                }
             } else {
                 loginMessage.style.color = '#FF0000';
                 loginMessage.textContent = 'Email atau password salah! Silahkan coba lagi.';
             }
-        } else {
-            loginMessage.style.color = '#FF0000';
-            loginMessage.textContent = 'Email atau password salah! Silahkan coba lagi.';
+            loginMessage.style.display = 'block';
+        });
+
+        function showSuccessMessage() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000); // Tampilkan selama 3 detik
         }
-        loginMessage.style.display = 'block';
-    });
 
-    function showSuccessMessage() {
-        const successMessage = document.getElementById('successMessage');
-        successMessage.style.display = 'block';
-        setTimeout(() => {
-            successMessage.style.display = 'none';
-        }, 3000); // Tampilkan selama 3 detik
-    }
-
-    document.getElementById('closeLoginPopup').addEventListener('click', function() {
-        document.getElementById('loginPopup').style.display = 'none';
-    });
-
-    document.getElementById('closeNotPremiumPopup').addEventListener('click', function() {
-        document.getElementById('notPremiumPopup').style.display = 'none';
-    });
-
-    document.getElementById('search').addEventListener('input', function(e) {
-        var searchVal = e.target.value.toLowerCase();
-        var items = document.querySelectorAll('.download-item');
-        items.forEach(function(item) {
-            var name = item.querySelector('h2').textContent.toLowerCase();
-            item.style.display = name.indexOf(searchVal) !== -1 ? 'flex' : 'none';
+        document.getElementById('closeLoginPopup').addEventListener('click', function() {
+            document.getElementById('loginPopup').style.display = 'none';
         });
-    });
 
-    var downloadBtns = document.querySelectorAll('.download-btn');
-    downloadBtns.forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-            var versionOptions = e.target.nextElementSibling;
-            versionOptions.style.display = versionOptions.style.display === 'block' ? 'none' : 'block';
+        document.getElementById('closeNotPremiumPopup').addEventListener('click', function() {
+            document.getElementById('notPremiumPopup').style.display = 'none';
         });
-    });
 
-    var versionBtns = document.querySelectorAll('.version-options button');
-    versionBtns.forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-            var link = e.target.getAttribute('data-link');
-            if (e.target.classList.contains('premium-download-btn')) {
-                const loggedInUserEmail = localStorage.getItem('premiumEmail');
-                const loggedInUserPassword = localStorage.getItem('premiumPassword');
-                if (loggedInUserEmail && loggedInUserPassword) {
-                    window.location.href = link;
+        document.getElementById('search').addEventListener('input', function(e) {
+            const searchVal = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.download-item');
+            items.forEach(function(item) {
+                const name = item.querySelector('h2').textContent.toLowerCase();
+                item.style.display = name.indexOf(searchVal) !== -1 ? 'flex' : 'none';
+            });
+        });
+
+        const downloadBtns = document.querySelectorAll('.download-btn');
+        downloadBtns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                const versionOptions = e.target.nextElementSibling;
+                versionOptions.style.display = versionOptions.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        const versionBtns = document.querySelectorAll('.version-options button');
+        versionBtns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                const link = e.target.getAttribute('data-link');
+                if (e.target.classList.contains('premium-download-btn')) {
+                    const loggedInUserEmail = localStorage.getItem('premiumEmail');
+                    const loggedInUserPassword = localStorage.getItem('premiumPassword');
+                    if (loggedInUserEmail && loggedInUserPassword) {
+                        window.location.href = link;
+                    } else {
+                        document.getElementById('notPremiumPopup').style.display = 'block';
+                    }
                 } else {
-                    document.getElementById('notPremiumPopup').style.display = 'block';
+                    window.location.href = link;
                 }
-            } else {
-                window.location.href = link;
-            }
+            });
         });
-    });
 
-    // Logout dengan konfirmasi
-    document.getElementById('logoutPremiumBtn').addEventListener('click', function() {
-        document.getElementById('logoutConfirmPopup').style.display = 'block'; // Tampilkan popup konfirmasi
-    });
+        // Logout dengan konfirmasi
+        document.getElementById('logoutPremiumBtn').addEventListener('click', function() {
+            document.getElementById('logoutConfirmPopup').style.display = 'block'; // Tampilkan popup konfirmasi
+        });
 
-    document.getElementById('noLogoutBtn').addEventListener('click', function() {
-        document.getElementById('logoutConfirmPopup').style.display = 'none'; // Tutup popup jika tidak
-    });
+        document.getElementById('noLogoutBtn').addEventListener('click', function() {
+            document.getElementById('logoutConfirmPopup').style.display = 'none'; // Tutup popup jika tidak
+        });
 
-    document.getElementById('yesLogoutBtn').addEventListener('click', function() {
-        localStorage.removeItem('premiumEmail');
-        localStorage.removeItem('premiumPassword');
-        localStorage.removeItem('isLoggedIn');
-        document.getElementById('loginPremiumBtn').style.display = 'inline-block';
-        document.getElementById('logoutPremiumBtn').style.display = 'none';
-        document.getElementById('expiryMessage').textContent = ''; // Reset pesan masa berlaku
-        document.getElementById('logoutConfirmPopup').style.display = 'none'; // Tutup popup konfirmasi setelah logout
-    });
-</script>
+        document.getElementById('yesLogoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('premiumEmail');
+            localStorage.removeItem('premiumPassword');
+            localStorage.removeItem('isLoggedIn');
+            document.getElementById('loginPremiumBtn').style.display = 'inline-block';
+            document.getElementById('logoutPremiumBtn').style.display = 'none';
+            document.getElementById('expiryMessage').textContent = ''; // Reset pesan masa berlaku
+            document.getElementById('logoutConfirmPopup').style.display = 'none'; // Tutup popup konfirmasi setelah logout
+        });
+    </script>
 </body>
 </html>
