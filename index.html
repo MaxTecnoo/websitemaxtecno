@@ -24,11 +24,27 @@
             font-weight: bold;
             margin-right: auto;
         }
+        .button-container {
+            border: 2px solid transparent; /* Border for color-changing effect */
+            border-radius: 5px;
+            padding: 10px;
+            margin: 0 10px;
+            animation: borderChange 5s infinite; /* Color-changing animation */
+        }
+        @keyframes borderChange {
+            0% { border-color: #FF0000; }
+            14% { border-color: #FF7F00; }
+            28% { border-color: #FFFF00; }
+            42% { border-color: #7FFF00; }
+            57% { border-color: #00FFFF; }
+            71% { border-color: #0000FF; }
+            85% { border-color: #7F00FF; }
+            100% { border-color: #FF0000; }
+        }
         .navbar a, .navbar button {
             color: #FFF;
-            background-color: #0F0;
             padding: 10px 20px;
-            margin: 0 10px;
+            margin: 0;
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
@@ -37,9 +53,30 @@
         .navbar a.youtube-btn {
             background-color: #F00;
         }
+        .navbar a.telegram-btn {
+            background-color: #0088cc; /* Telegram color */
+        }
+        .navbar button.buy-premium-button {
+            background-color: #FFD700; /* Gold color */
+            color: #000;
+        }
+        .navbar button.login-button {
+            background-color: #4CAF50; /* Green color */
+            color: #FFF;
+        }
         .navbar a.youtube-btn:hover {
             transform: scale(1.1);
             background-color: #A00;
+        }
+        .navbar a.telegram-btn:hover {
+            transform: scale(1.1);
+            background-color: #005f99;
+        }
+        .navbar button.buy-premium-button:hover {
+            background-color: #FFC300; /* Lighter gold */
+        }
+        .navbar button.login-button:hover {
+            background-color: #45a049; /* Darker green */
         }
         #search {
             width: 100%;
@@ -50,6 +87,7 @@
             animation: rainbow 5s infinite;
             border: 2px solid transparent;
             border-radius: 5px;
+            display: none; /* Hide initially */
         }
         .info-text {
             font-weight: bold;
@@ -244,8 +282,8 @@
         }
         .buy-premium-button {
             display: block;
-            background-color: #F69;
-            color: #FFF;
+            background-color: #FFD700; /* Gold color */
+            color: #000;
             font-weight: bold;
             padding: 10px 20px;
             border: none;
@@ -255,7 +293,7 @@
         }
 
         .buy-premium-button:hover {
-            background-color: #F19;
+            background-color: #FFC300; /* Lighter gold */
             transform: scale(1.05);
         }
 
@@ -380,7 +418,10 @@
 <body>
     <div class="navbar">
         <div class="navbar-title">MaxTecno WEBSITE</div>
-        <a class="youtube-btn" href="https://youtube.com/@maxtecnoo?si=WhIdupkhm85Xn4no" target="_blank">YouTube</a>
+        <div class="button-container">
+            <a class="youtube-btn" href="https://youtube.com/@fixtecno?si=A3yWI-Z__LPHgAXn" target="_blank">YouTube</a>
+            <a class="telegram-btn" href="https://t.me/maxtecnoo" target="_blank">Telegram Grup</a>
+        </div>
         <button class="buy-premium-button" id="buyPremiumBtn">Beli Premium</button>
         <button class="login-button" id="loginPremiumBtn">Login Premium</button>
         <button class="logout-button" id="logoutPremiumBtn" style="display: none;">Logout Premium</button>
@@ -450,6 +491,16 @@
     <!-- Popup informasi login -->
     <div class="info-popup" id="loginInfoPopup">
         Email dan password akan di beri admin jika kamu sudah beli premium👑
+    </div>
+
+    <!-- Popup for Admin Delete User -->
+    <div class="floating-popup" id="adminDeleteUserPopup">
+        <h3>Hapus Pengguna</h3>
+        <input type="email" id="deleteUserEmail" placeholder="Masukkan Email Pengguna" required>
+        <input type="password" id="deleteUserPassword" placeholder="Masukkan Password Pengguna" required>
+        <button id="submitDeleteUser">Hapus</button>
+        <button class="close-popup" id="closeAdminDeleteUserPopup">Tutup</button>
+        <div id="deleteUserMessage" style="margin-top: 10px; color: #F00; display: none;"></div>
     </div>
 
     <div class="download-item app-mod" data-name="GPT-4o MOD">
@@ -570,6 +621,11 @@
             }
         };
 
+        const adminCredentials = {
+            username: "jarmaou@gmail.com",
+            password: "jar01"
+        };
+
         // Load data dari localStorage
         const savedEmail = localStorage.getItem('premiumEmail');
         const savedPassword = localStorage.getItem('premiumPassword');
@@ -614,6 +670,13 @@
 
             // Reset pesan login
             loginMessage.style.display = 'none';
+
+            // Admin login check
+            if (emailInput === adminCredentials.username && passwordInput === adminCredentials.password) {
+                document.getElementById('loginPremiumBtn').textContent = 'Delete User';
+                document.getElementById('loginPopup').style.display = 'none';
+                return;
+            }
 
             // Validasi email
             if (!emailInput.endsWith('@gmail.com')) {
@@ -667,15 +730,6 @@
             document.getElementById('notPremiumPopup').style.display = 'none';
         });
 
-        document.getElementById('search').addEventListener('input', function(e) {
-            const searchVal = e.target.value.toLowerCase();
-            const items = document.querySelectorAll('.download-item');
-            items.forEach(function(item) {
-                const name = item.querySelector('h2').textContent.toLowerCase();
-                item.style.display = name.indexOf(searchVal) !== -1 ? 'flex' : 'none';
-            });
-        });
-
         const downloadBtns = document.querySelectorAll('.download-btn');
         downloadBtns.forEach(function(btn) {
             btn.addEventListener('click', function(e) {
@@ -721,6 +775,60 @@
             document.getElementById('logoutConfirmPopup').style.display = 'none'; // Tutup popup konfirmasi setelah logout
         });
 
+        // Admin delete user flow
+        document.getElementById('loginPremiumBtn').addEventListener('click', function() {
+            if (this.textContent === 'Delete User') {
+                document.getElementById('adminDeleteUserPopup').style.display = 'block';
+            }
+        });
+
+        document.getElementById('submitDeleteUser').addEventListener('click', function() {
+            const userEmailToDelete = document.getElementById('deleteUserEmail').value;
+            const userPasswordToDelete = document.getElementById('deleteUserPassword').value;
+            const deleteUserMessage = document.getElementById('deleteUserMessage');
+
+            const user = premiumUsers[userEmailToDelete];
+            if (user && user.password === userPasswordToDelete) {
+                // Perform logout for the user
+                if (localStorage.getItem('premiumEmail') === userEmailToDelete) {
+                    localStorage.removeItem('premiumEmail');
+                    localStorage.removeItem('premiumPassword');
+                    localStorage.removeItem('isLoggedIn');
+                    document.getElementById('loginPremiumBtn').style.display = 'inline-block';
+                    document.getElementById('logoutPremiumBtn').style.display = 'none';
+                    document.getElementById('expiryMessage').textContent = '';
+                }
+                deleteUserMessage.style.color = '#00FF00';
+                deleteUserMessage.textContent = 'Pengguna berhasil dihapus.';
+            } else {
+                deleteUserMessage.style.color = '#FF0000';
+                deleteUserMessage.textContent = 'Email atau password salah! Silahkan coba lagi.';
+            }
+            deleteUserMessage.style.display = 'block';
+        });
+
+        document.getElementById('closeAdminDeleteUserPopup').addEventListener('click', function() {
+            document.getElementById('adminDeleteUserPopup').style.display = 'none';
+        });
+
+        // Handle category-specific search
+        let currentCategory = '';
+
+        function setupSearch(category) {
+            currentCategory = category; // Set the current category
+            const searchInput = document.getElementById('search');
+            searchInput.style.display = 'block';
+            searchInput.value = ''; // Clear previous search value
+            searchInput.oninput = function(e) {
+                const searchVal = e.target.value.toLowerCase();
+                const items = document.querySelectorAll(`.${currentCategory}`);
+                items.forEach(function(item) {
+                    const name = item.querySelector('h2').textContent.toLowerCase();
+                    item.style.display = name.indexOf(searchVal) !== -1 ? 'flex' : 'none';
+                });
+            };
+        }
+
         // Switch between app and game mod
         const appModItems = document.querySelectorAll('.app-mod');
         const gameModItems = document.querySelectorAll('.game-mod');
@@ -744,6 +852,7 @@
             apkModItems.forEach(item => item.style.display = 'none');
             gamingModItems.forEach(item => item.style.display = 'none');
             moduleModItems.forEach(item => item.style.display = 'none');
+            document.getElementById('search').style.display = 'none'; // Hide search input
         }
 
         document.getElementById('showAppMods').addEventListener('click', function() {
@@ -754,6 +863,7 @@
             homeButton.style.display = 'block';
             freeDownloadTitle.style.display = 'none'; // Hide Free Download title
             document.getElementById('mainButtons').style.display = 'none'; // Hide main buttons
+            setupSearch('app-mod');
         });
 
         document.getElementById('showGameMods').addEventListener('click', function() {
@@ -764,6 +874,7 @@
             homeButton.style.display = 'block';
             freeDownloadTitle.style.display = 'none'; // Hide Free Download title
             document.getElementById('mainButtons').style.display = 'none'; // Hide main buttons
+            setupSearch('game-mod');
         });
 
         homeButton.addEventListener('click', function() {
@@ -785,6 +896,7 @@
             freeDownloadTitle.style.display = 'none'; // Hide Free Download title
             contentOnly.style.display = 'none';
             document.getElementById('mainButtons').style.display = 'none'; // Hide main buttons
+            setupSearch('apk-mod');
         });
 
         document.getElementById('gameButton').addEventListener('click', function() {
@@ -798,6 +910,7 @@
             freeDownloadTitle.style.display = 'none'; // Hide Free Download title
             contentOnly.style.display = 'none';
             document.getElementById('mainButtons').style.display = 'none'; // Hide main buttons
+            setupSearch('gaming-mod');
         });
 
         document.getElementById('moduleButton').addEventListener('click', function() {
@@ -811,6 +924,7 @@
             freeDownloadTitle.style.display = 'none'; // Hide Free Download title
             contentOnly.style.display = 'none';
             document.getElementById('mainButtons').style.display = 'none'; // Hide main buttons
+            setupSearch('module-mod');
         });
     </script>
 </body>
