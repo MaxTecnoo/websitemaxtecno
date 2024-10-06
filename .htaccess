@@ -1,0 +1,87 @@
+# Aktifkan mod_rewrite
+RewriteEngine On
+
+# Atur file indeks default
+DirectoryIndex index.html index.php
+
+# Hapus ekstensi .html dari URL
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([^/]+)$ $1.html [L]
+
+# Izinkan akses ke semua file dengan ekstensi .html
+<FilesMatch "\.html$">
+    Require all granted
+</FilesMatch>
+
+# Izinkan akses ke direktori
+Options +Indexes
+
+# Mengaktifkan Gzip Compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript
+</IfModule>
+
+# Mengatur Cache Browser
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/pdf "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+</IfModule>
+
+# Menghilangkan ETag
+Header unset ETag
+FileETag None
+
+# Mengalihkan HTTP ke HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Mempercepat Respons Server
+<IfModule mod_headers.c>
+    Header set X-Powered-By "YourCompanyName"
+    Header set Cache-Control "max-age=31536000, public"
+    Header set Pragma "public"
+</IfModule>
+
+# Mengizinkan Prefetching untuk Sumber Daya
+<IfModule mod_headers.c>
+    Header set Link "</path/to/resource>; rel=preload; as=script"
+</IfModule>
+
+# Menonaktifkan Kompresi untuk Teks yang Sudah Terkompresi
+<IfModule mod_deflate.c>
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|svg|css|js)$ no-gzip dont-vary
+</IfModule>
+
+# Mengatur Header untuk Cross-Origin Resource Sharing (CORS)
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+</IfModule>
+
+# Mengurangi Latensi Melalui Keep-Alive
+<IfModule mod_headers.c>
+    Header set Connection "Keep-Alive"
+    Header set Keep-Alive "timeout=5, max=100"
+</IfModule>
+
+# Mengatur Kompresi untuk Font
+<IfModule mod_deflate.c>
+    AddType application/font-woff2 .woff2
+    AddType application/font-woff .woff
+    AddOutputFilterByType DEFLATE application/font-woff2
+    AddOutputFilterByType DEFLATE application/font-woff
+</IfModule>
+
+# Mempercepat Pemuatan Halaman dengan Menyediakan Prabaca untuk Gambar
+<IfModule mod_headers.c>
+    Header set Link "</path/to/image.jpg>; rel=preload; as=image"
+</IfModule>
